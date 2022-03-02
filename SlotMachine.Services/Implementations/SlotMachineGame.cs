@@ -27,26 +27,33 @@ namespace SlotMachine.Services.Implementations
 
             while (balance > 0)
             {
-                Console.WriteLine("Enter stake amount:");
-                decimal stakedAmount = decimal.Parse(Console.ReadLine());
-
-                //Lets the service create our symbol result
-                List<List<ISymbol>> result = SymbolService.CreateSymbolResult(Pool);
-
-                //Prints out the symbol array
-
-                foreach (var symbolRow in result)
+                try
                 {
-                    Console.WriteLine(string.Join(" ", symbolRow.Select(s => s.Mark)));
+                    Console.WriteLine("Enter stake amount:");
+                    decimal stakedAmount = decimal.Parse(Console.ReadLine());
+
+                    //Lets the service create our symbol result
+                    List<List<ISymbol>> result = SymbolService.CreateSymbolResult(Pool);
+
+                    //Prints out the symbol array
+
+                    foreach (var symbolRow in result)
+                    {
+                        Console.WriteLine(string.Join(" ", symbolRow.Select(s => s.Mark)));
+                    }
+
+                    //Calculate the balance based on the result of the current turn
+                    var stakedAmountAfterTurn = SlotMachineCaluclatorService.UpdateBalance(result, stakedAmount, ref balance);
+
+                    Console.WriteLine($"You have won: {stakedAmountAfterTurn}");
+                    Console.WriteLine($"Current balance is: {balance}");
+
+                    Console.ReadKey();
                 }
-
-                //Calculate the balance based on the result of the current turn
-                var stakedAmountAfterTurn = SlotMachineCaluclatorService.UpdateBalance(result, stakedAmount, ref balance);
-
-                Console.WriteLine($"You have won: {stakedAmountAfterTurn}");
-                Console.WriteLine($"Current balance is: {balance}");
-
-                Console.ReadKey();
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
     }
