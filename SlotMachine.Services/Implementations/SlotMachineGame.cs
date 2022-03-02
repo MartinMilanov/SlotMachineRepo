@@ -32,6 +32,10 @@ namespace SlotMachine.Services.Implementations
                     Console.WriteLine("Enter stake amount:");
                     decimal stakedAmount = decimal.Parse(Console.ReadLine());
 
+                    if(stakedAmount < 0)
+                    {
+                        stakedAmount *= -1;
+                    }
                     //Lets the service create our symbol result
                     List<List<ISymbol>> result = SymbolService.CreateSymbolResult(Pool);
 
