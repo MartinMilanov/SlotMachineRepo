@@ -51,7 +51,7 @@ namespace SlotMachine.Services.Implementations
                 {
                     foreach (var mark in marks)
                     {
-                        sumToAdd = mark.Value.Sum(s => s.Coefficient);
+                        sumToAdd += mark.Value.Sum(s => s.Coefficient);
                     }
                     summedCoefficient += sumToAdd;
                 }
