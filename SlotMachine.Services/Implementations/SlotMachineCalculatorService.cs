@@ -17,7 +17,6 @@ namespace SlotMachine.Services.Implementations
 
             if (summedCoefficient > 0)
             {
-                balance += stakedAmount;
                 balance += sumToAdd;
             }
 
