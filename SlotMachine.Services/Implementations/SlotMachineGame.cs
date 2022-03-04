@@ -22,42 +22,49 @@ namespace SlotMachine.Services.Implementations
         }
         public void Start()
         {
-            Console.WriteLine("Please deposit money you would like to play with:");
-            decimal balance = decimal.Parse(Console.ReadLine());
-
-            while (balance > 0)
+            try
             {
-                try
+                Console.WriteLine("Please deposit money you would like to play with:");
+                decimal balance = decimal.Parse(Console.ReadLine());
+
+                while (balance > 0)
                 {
-                    Console.WriteLine("Enter stake amount:");
-                    decimal stakedAmount = decimal.Parse(Console.ReadLine());
-
-                    if(stakedAmount < 0)
+                    try
                     {
-                        stakedAmount *= -1;
+                        Console.WriteLine("Enter stake amount:");
+                        decimal stakedAmount = decimal.Parse(Console.ReadLine());
+
+                        if (stakedAmount < 0)
+                        {
+                            stakedAmount *= -1;
+                        }
+                        //Lets the service create our symbol result
+                        List<List<ISymbol>> result = SymbolService.CreateSymbolResult(Pool);
+
+                        //Prints out the symbol array
+
+                        foreach (var symbolRow in result)
+                        {
+                            Console.WriteLine(string.Join(" ", symbolRow.Select(s => s.Mark)));
+                        }
+
+                        //Calculate the balance based on the result of the current turn
+                        var stakedAmountAfterTurn = SlotMachineCaluclatorService.UpdateBalance(result, stakedAmount, ref balance);
+
+                        Console.WriteLine($"You have won: {stakedAmountAfterTurn}");
+                        Console.WriteLine($"Current balance is: {balance}");
+
+                        Console.ReadKey();
                     }
-                    //Lets the service create our symbol result
-                    List<List<ISymbol>> result = SymbolService.CreateSymbolResult(Pool);
-
-                    //Prints out the symbol array
-
-                    foreach (var symbolRow in result)
+                    catch (Exception ex)
                     {
-                        Console.WriteLine(string.Join(" ", symbolRow.Select(s => s.Mark)));
+                        Console.WriteLine(ex.Message);
                     }
-
-                    //Calculate the balance based on the result of the current turn
-                    var stakedAmountAfterTurn = SlotMachineCaluclatorService.UpdateBalance(result, stakedAmount, ref balance);
-
-                    Console.WriteLine($"You have won: {stakedAmountAfterTurn}");
-                    Console.WriteLine($"Current balance is: {balance}");
-
-                    Console.ReadKey();
                 }
-                catch(Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }
