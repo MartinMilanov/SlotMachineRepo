@@ -7,7 +7,7 @@ namespace SlotMachine.Services.Implementations
     public class SlotMachineCalculatorService : ISlotMachineCalculatorService
     {
         //SUMMARY: Method that updates the balance based on the coefficient
-        public decimal UpdateBalance(List<List<ISymbol>> rows, decimal stakedAmount, ref decimal balance)
+       public decimal UpdateBalance(List<List<ISymbol>> rows, decimal stakedAmount, ref decimal balance)
         {
             decimal summedCoefficient = CalculateSpinResultCoefficient(rows);
 
@@ -15,7 +15,11 @@ namespace SlotMachine.Services.Implementations
 
             decimal sumToAdd = summedCoefficient * stakedAmount;
 
-            balance += sumToAdd;
+            if (summedCoefficient > 0)
+            {
+                balance += stakedAmount;
+                balance += sumToAdd;
+            }
 
             return sumToAdd;
         }
